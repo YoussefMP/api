@@ -1,0 +1,11 @@
+{
+    "ID": "Data_ID_4",
+    "file_path": "http://localhost:8000/file/StromNetz.txt",
+    
+    "inspire_desc": {
+        "inspire1": "Strom",
+        "inspire2": 210
+    },
+
+    "text_desc": "The data here describes the structure of an electric grid"
+}

@@ -1,0 +1,11 @@
+{
+    "ID": "Data_ID_0",
+    "file_path": "http://localhost:8000/file/Data.zip",
+    
+    "inspire_desc": {
+        "inspire1": "Hello",
+        "inspire2": 21
+    },
+
+    "text_desc": "Hello There! I am here to tell you something about the data we have"
+}

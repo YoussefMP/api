@@ -1,0 +1,11 @@
+{
+    "ID": "Data_ID_2",
+    "file_path": "http://localhost:8000/file/Data2.txt",
+    
+    "inspire_desc": {
+        "inspire1": "Goodbye",
+        "inspire2": 20
+    },
+
+    "text_desc": "The other one is lying, I am here to tell you something about the data."
+}
