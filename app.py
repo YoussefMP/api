@@ -7,7 +7,7 @@ import os
 
 app = FastAPI()
 
-GUID = ["90", "91", "92"]
+GUID = ["b963d4f0-cb8b-46c4-ba31-f6aabab21fcf"]
 client = None
 
 class Token(BaseModel): 
