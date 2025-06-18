@@ -55,7 +55,7 @@ async def list_content():
         return {
             "client": client,
             "current_path": os.listdir(),
-            "check": os.path.exists(f"./Data/{client})",
+            "check": os.path.exists(f"./Data/{client}"),
             "Check1": os.path.exists(f".\\Data\\{client}"),
             "Check2": os.path.exists(f".\\..\\Data\\{client}"),
         }
