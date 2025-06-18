@@ -50,13 +50,20 @@ async def read_item(item_id: int, q: Union[str, None] = None):
 
 @router.get("/list")
 async def list_content():
+    global client 
     if not os.path.exists(f"./Data/{client}"):
-        return None
+        return {
+            "client": client,
+            "current_path": os.listdir(),
+            "check": os.path.exists(f"./Data/{client}",
+            "Check1": os.path.exists(f".\\Data\\{client}"),
+            "Check2": os.path.exists(f".\\..\\Data\\{client}"),
+        }
     files = os.listdir(f"./Data/{client}")
     response = []
     for file in files:
         if file.endswith(".json"):
-            metadata_file = open(f"./Data/{client}/{file}", "r", encoding="utf-8") 
+            metadata_file = open(f"./Data/{client}/{file}", "r", encoding="utf-8")
             response.append(json.load(metadata_file))
 
     return response
