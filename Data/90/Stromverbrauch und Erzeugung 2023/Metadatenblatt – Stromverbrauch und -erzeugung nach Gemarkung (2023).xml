@@ -1,0 +1,53 @@
+<Metadata>
+  <Title>Stromverbrauch und -erzeugung auf Ebene der Gemarkungen – Jahr 2023</Title>
+  <Abstract>
+    Dieser Datensatz vereint geografische Grenzen von Gemarkungen der Stadt Paderborns mit Informationen zur Stromnutzung und -erzeugung.
+    Die Daten basieren auf Stromverbrauch(-Erzeugung)sdaten auf Objektebene (bereitgestellt von Westfalen Weser) sowie Gemarkungsgrenzen (bereitgestellt von der Stadt Paderborn).
+    Zudem enthält der Datensatz berechnete Werte wie die flächenbezogene Nutzung (GWh pro km²).
+  </Abstract>
+  <Keywords>
+    <Keyword>Energie</Keyword>
+    <Keyword>Strom</Keyword>
+    <Keyword>Verbrauch</Keyword>
+    <Keyword>Erzeugung</Keyword>
+    <Keyword>GIS</Keyword>
+    <Keyword>Geodaten</Keyword>
+    <Keyword>GWh</Keyword>
+    <Keyword>Gemarkung</Keyword>
+    <Keyword>Versorgungsanalyse</Keyword>
+  </Keywords>
+  <Language>de</Language>
+  <MetadataDate>2025-05-09</MetadataDate>
+  <DataDate>2025-05-09</DataDate>
+  <ResponsibleParty>
+    <Organisation>Westfalen Weser – Abteilung Geschäftsfeldentwicklung</Organisation>
+    <Role>Ersteller / Herausgeber</Role>
+  </ResponsibleParty>
+  <BoundingBox crs="EPSG:4326">
+    <West>8.636287</West>
+    <East>8.900572</East>
+    <South>51.654233</South>
+    <North>51.800934</North>
+  </BoundingBox>
+  <CoordinateReferenceSystem>
+    <Name>WGS 84</Name>
+    <EPSG>4326</EPSG>
+  </CoordinateReferenceSystem>
+  <SpatialResolution>
+    <Description>Gemarkungspolygone</Description>
+  </SpatialResolution>
+  <UsageConstraints>
+    Nur zur internen Verwendung im Projektkontext. Weitergabe oder Veröffentlichung nur mit Zustimmung des Partners.
+  </UsageConstraints>
+  <Lineage>
+    <Geometry>Stadt Paderborn (Gemarkungsgrenzen)</Geometry>
+    <StromverbrauchProFlaeche>berechnet als Stromverbrauch_GWH / Shape.Area</StromverbrauchProFlaeche>
+    <ErzeugungUndVerbrauchsdaten>Westfalen Weser Netz (aggregiert)</ErzeugungUndVerbrauchsdaten>
+    <StromerzeugungProFlaeche>berechnet als Stromerzeugung_GWh / Shape.Area</StromerzeugungProFlaeche>
+    <ProcessingYear>2023</ProcessingYear>
+  </Lineage>
+  <FormatAndProjection>
+    <Format>GeoJSON</Format>
+    <Projection>EPSG:4326 (WGS 84)</Projection>
+  </FormatAndProjection>
+</Metadata>
