@@ -9,13 +9,17 @@ app = FastAPI()
 
 GUID = ["b963d4f0-cb8b-46c4-ba31-f6aabab21fcf"]
 client = None
+CLIENTS = {
+    "b963d4f0-cb8b-46c4-ba31-f6aabab21fcf": "90",
+}
 
 class Token(BaseModel): 
     token: str
 
 def get_current_user(token: str = Header()):
     global client 
-    client = token
+    global CLIENTS
+    client = CLIENTS[token]
 
     if token not in GUID:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
