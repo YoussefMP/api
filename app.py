@@ -1,5 +1,5 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, Header
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, status, Header, File, UploadFile, Form, Query
+from fastapi.responses import FileResponse, JSONResponse
 from pydantic import EmailStr, BaseModel
 from typing import Union, List
 import json 
@@ -19,12 +19,20 @@ class Token(BaseModel):
 def get_current_user(token: str = Header()):
     global client 
     global CLIENTS
-    client = CLIENTS[token]
+    client = CLIENTS.get(token)
 
     if token not in GUID:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Invalid token",
-                            )
+
+        raise HTTPException(
+            status_code = status.HTTP_401_UNAUTHORIZED,
+            detail= "Invalid request"
+        )
+
+        # return JSONResponse(
+        #     status_code=status.HTTP_401_UNAUTHORIZED,
+        #     content={"status": "Invalid Request"}
+        # )
+
     else:
         return token
 
@@ -41,38 +49,126 @@ def read_content():
 async def read_root():
     return "You get data, You get Data, EVERYBODY gets Data"
 
-@router.get("/items/{item_id}")
-async def read_item(item_id: int, q: Union[str, None] = None):
-    global content
-    if not content:
-        content = read_content()
-    return content[item_id]
 
-@router.get("/list")
-async def list_content():
-    global client 
-    if not os.path.exists(f"./Data/{client}"):
-        return {
-            "client": client,
-            "current_path": os.listdir(),
-            "check": os.path.exists(f"./Data/{client}"),
-            "Check1": os.path.exists(f".\\Data\\{client}"),
-            "Check2": os.path.exists(f".\\..\\Data\\{client}"),
-        }
-    files = os.listdir(f"./Data/{client}")
+@router.post("/establish-connection")
+async def authenticate_user():
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"status": "connected", "permissions": "admin"}
+    )
+    
+
+@router.get("/list-files")
+async def list_files():
     response = []
-    for file in files:
-        if file.endswith(".json"):
-            metadata_file = open(f"./Data/{client}/{file}", "r", encoding="utf-8")
-            response.append(json.load(metadata_file))
+    if os.path.exists(f"./Data/{client}/Unecessary"):
+        files = os.listdir(f"./Data/{client}/Unecessary")
+        print(files)
 
-    return response
+        for file_id in range(len(files)):
+            response.append({"id": file_id,
+                            "name": files[file_id],
+                            "description": ""
+                            })
 
-@router.get("/file/{file_name}")
-async def send_file(file_name: str):
+    return {"files": response}
+
+
+@router.post("/request-file")
+async def request_file(
+    file: UploadFile = File(...),
+    location_id: str = Form(None)
+):
     try:
-        return FileResponse(f"./Data/{client}/{file_name}")
-    except FileNotFoundError:
-        return {"error": "File not found!"}
+        if not file:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "invalidrequest", "message": "Malformed request or missing file"}
+            )
+
+        # Here you would handle the file (e.g. save, process, etc.)
+        return JSONResponse(
+            status_code=200,
+            content={
+                "status": "accepted",
+                "location_id": location_id or "unspecified",
+                "message": "File submitted for processing"
+            }
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+
+
+@router.get("/request-targetfile")
+async def request_targetfile(location_id: str = Query(None)):
+    if not location_id:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "invalidrequest", "message": "Missing location_id"}
+        )
+
+    try:
+        # Replace with actual file lookup logic
+        file_path = f"./Data/{client}/Outputs/{location_id}.zip"
+
+        # Simulate file not found
+        if not os.path.exists(file_path):
+            return JSONResponse(
+                status_code=404,
+                content={"status": "notfound", "message": "File not found or access denied"}
+            )
+
+        return FileResponse(
+            path=file_path,
+            media_type='application/zip',
+            filename=f"result_{location_id}.zip"
+        )
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "message": str(e)}
+        )
+
+
+
+
+# @router.get("/items/{item_id}")
+# async def read_item(item_id: int, q: Union[str, None] = None):
+#     global content
+#     if not content:
+#         content = read_content()
+#     return content[item_id]
+
+# @router.get("/list")
+# async def list_content():
+#     global client 
+#     if not os.path.exists(f"./Data/{client}"):
+#         return {
+#             "client": client,
+#             "current_path": os.listdir(),
+#             "check": os.path.exists(f"./Data/{client}"),
+#             "Check1": os.path.exists(f".\\Data\\{client}"),
+#             "Check2": os.path.exists(f".\\..\\Data\\{client}"),
+#         }
+#     files = os.listdir(f"./Data/{client}")
+#     response = []
+#     for file in files:
+#         if file.endswith(".json"):
+#             metadata_file = open(f"./Data/{client}/{file}", "r", encoding="utf-8")
+#             response.append(json.load(metadata_file))
+
+#     return response
+
+# @router.get("/file/{file_name}")
+# async def send_file(file_name: str):
+#     try:
+#         return FileResponse(f"./Data/{client}/{file_name}")
+#     except FileNotFoundError:
+#         return {"error": "File not found!"}
 
 app.include_router(router)
