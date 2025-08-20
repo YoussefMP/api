@@ -86,9 +86,10 @@ async def request_file(
                 content={"status": "invalidrequest", "message": "Malformed request or missing file"}
             )
 
-        else:                       
-            file_size = len(file.read())  # Size in bytes
-            uploaded_file.seek(0)  # Reset file pointer if needed later
+        else:                     
+            contents = await file.read()
+            file_size = len(contents)
+            await file.seek(0)
             max_size_mb = 25
             max_size_bytes = max_size_mb * 1024 * 1024
 
@@ -96,8 +97,9 @@ async def request_file(
                 return "File is too large (over 25 MB)."
             else:
                 save_path = f"./Data/{client}/Received/{file.filename}"
-                uploaded_file.seek(0)  # Ensure file pointer is at the beginning
-                uploaded_file.save(save_path)
+                with open(save_path, "wb") as f:
+                    f.write(await file.read())
+                await file.seek(0)
 
                 # Here you would handle the file (e.g. save, process, etc.)
                 return JSONResponse(
