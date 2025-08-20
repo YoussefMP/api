@@ -95,17 +95,21 @@ async def request_file(
             if file_size > max_size_bytes:
                 return "File is too large (over 25 MB)."
             else:
-                return "File size is acceptable."
+                save_path = f"./Data/{client}/Received/{file.filename}"
+                uploaded_file.seek(0)  # Ensure file pointer is at the beginning
+                uploaded_file.save(save_path)
+
+                # Here you would handle the file (e.g. save, process, etc.)
+                return JSONResponse(
+                    status_code=200,
+                    content={
+                        "status": "accepted",
+                        "location_id": location_id or "unspecified",
+                        "message": "File submitted for processing"
+                    }
 
 
-        # Here you would handle the file (e.g. save, process, etc.)
-        return JSONResponse(
-            status_code=200,
-            content={
-                "status": "accepted",
-                "location_id": location_id or "unspecified",
-                "message": "File submitted for processing"
-            }
+
         )
     except Exception as e:
         return JSONResponse(
