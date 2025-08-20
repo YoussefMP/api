@@ -86,6 +86,18 @@ async def request_file(
                 content={"status": "invalidrequest", "message": "Malformed request or missing file"}
             )
 
+        else:                       
+            file_size = len(file.read())  # Size in bytes
+            uploaded_file.seek(0)  # Reset file pointer if needed later
+            max_size_mb = 25
+            max_size_bytes = max_size_mb * 1024 * 1024
+
+            if file_size > max_size_bytes:
+                return "File is too large (over 25 MB)."
+            else:
+                return "File size is acceptable."
+
+
         # Here you would handle the file (e.g. save, process, etc.)
         return JSONResponse(
             status_code=200,
@@ -113,7 +125,7 @@ async def request_targetfile(location_id: str = Query(None)):
 
     try:
         # Replace with actual file lookup logic
-        file_path = f"./Data/{client}/Outputs/{location_id}.zip"
+        file_path = f"./Data/{client}/Outputs/result_{location_id}.zip"
 
         # Simulate file not found
         if not os.path.exists(file_path):
