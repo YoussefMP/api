@@ -98,8 +98,7 @@ async def request_file(
             else:
                 save_path = f"./Data/{client}/Received/{file.filename}"
                 with open(save_path, "wb") as f:
-                    f.write(await file.read())
-                await file.seek(0)
+                    f.write(contents)
 
                 # Here you would handle the file (e.g. save, process, etc.)
                 return JSONResponse(
